@@ -10,35 +10,35 @@ import {
 } from 'react-native';
 import {Context} from '../Context';
 
-const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
+const LifestyleScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
 
   const options = [
-    'Become Famous',
-    'Make Millions of Dollars',
-    'Change the World',
-    'Inspire Millions of People',
-    'Become a Doctor or Lawyer',
-    'Become a Pro Athlete',
-    'Still Figuring it Out',
+    'Very Active & Healthy',
+    'Video Games Daily',
+    'Go to Clubs Every Night',
+    'Hang with Close Friends',
+    'Extreme Sports',
+    'Build Huge Company',
+    'Hangout with Family',
   ];
 
   const renderItem = (item: string) => (
     <TouchableOpacity
       style={
-        item === selectedOptions.purpose
+        item === selectedOptions.lifestyle
           ? styles.optionButtonClicked
           : styles.optionButton
       }
       onPress={() => {
-        setSelectedOptions({...selectedOptions, purpose: item});
+        setSelectedOptions({...selectedOptions, lifestyle: item});
         setTimeout(() => {
-          navigation.navigate('LifestyleScreen');
+          // navigation.navigate('')
         }, 500);
       }}>
       <Text
         style={
-          item === selectedOptions.purpose
+          item === selectedOptions.lifestyle
             ? styles.optionTextClicked
             : styles.optionText
         }>
@@ -62,7 +62,7 @@ const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
         </TouchableOpacity>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
       </View>
-      <Text style={styles.question}>What is your purpose in life?</Text>
+      <Text style={styles.question}>What is your ideal lifestyle?</Text>
       <FlatList
         contentContainerStyle={styles.optionsContainer}
         data={options}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     transform: [{translateX: -15}],
   },
   progressBar: {
-    width: 70,
+    width: 140,
     height: 5,
     backgroundColor: '#CC6F35',
     position: 'absolute',
@@ -180,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PurposeScreen;
+export default LifestyleScreen;

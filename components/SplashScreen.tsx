@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 40,
     textAlign: 'center',
+    fontFamily: 'Poppins-Medium',
   },
   buttonContainer: {
     width: '96%',
@@ -72,18 +73,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '900',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-ExtraBold',
   },
   termsText: {
     color: '#fff',
     fontSize: 12,
     textAlign: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
+    fontFamily: 'Poppins-Regular',
   },
   linkText: {
-    fontWeight: 'bold',
-    fontSize: 10,
+    fontFamily: 'Poppins-SemiBold',
   },
 });
 
