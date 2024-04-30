@@ -8,9 +8,11 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Header from './Header';
 
 const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const requestCameraPermission = async () => {
@@ -89,16 +91,8 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.progressBar} />
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header navigation={navigation} progress={220} />
       <Text style={styles.question}>Take or upload 1-5 photos</Text>
       <TouchableOpacity onPress={requestCameraPermission}>
         <Image
@@ -133,7 +127,7 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
       <Text style={styles.footerText}>
         Maxi uses this photo to generate your custom vision board
       </Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -143,42 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#2c2c2c',
-    paddingTop: 50,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
-    paddingTop: 10,
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{translateX: -15}],
-  },
-  progressBar: {
-    width: 220,
-    height: 5,
-    backgroundColor: '#CC6F35',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  backButton: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    alignSelf: 'flex-start',
-    marginLeft: 10,
-  },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '900',
   },
   question: {
     color: '#fff',

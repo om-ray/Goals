@@ -2,13 +2,14 @@ import {NavigationProp} from '@react-navigation/native';
 import React, {useContext} from 'react';
 import {
   StyleSheet,
-  View,
   Text,
   FlatList,
   TouchableOpacity,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import {Context} from '../Context';
+import Header from './Header';
 
 const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
@@ -49,20 +50,8 @@ const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.progressBar} />
-        <TouchableOpacity style={styles.backButton}>
-          <Text
-            onPress={() => {
-              navigation.navigate('SplashScreen');
-            }}
-            style={styles.backButtonText}>
-            ←
-          </Text>
-        </TouchableOpacity>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header navigation={navigation} progress={70} />
       <Text style={styles.question}>What is your purpose in life?</Text>
       <FlatList
         contentContainerStyle={styles.optionsContainer}
@@ -74,7 +63,7 @@ const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
         <Image source={require('../assets/MaxiReset.png')} />
         <Text style={styles.moreOptionsText}>More options</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -84,42 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#2c2c2c',
-    paddingVertical: 50,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
-    paddingTop: 10,
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{translateX: -15}],
-  },
-  progressBar: {
-    width: 70,
-    height: 5,
-    backgroundColor: '#CC6F35',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  backButton: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    alignSelf: 'flex-start',
-    marginLeft: 10,
-  },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '900',
+    paddingBottom: 50,
   },
   question: {
     color: '#fff',

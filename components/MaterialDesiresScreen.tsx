@@ -10,9 +10,11 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  SafeAreaView,
 } from 'react-native';
 import {Context} from '../Context';
 import {NavigationProp} from '@react-navigation/native';
+import Header from './Header';
 
 const SelectableList = ({
   items,
@@ -149,20 +151,8 @@ const MaterialDesiresScreen = ({
     toggleSelection(item, dreamMisc, setDreamMisc);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.progressBar} />
-        <TouchableOpacity style={styles.backButton}>
-          <Text
-            onPress={() => {
-              navigation.goBack();
-            }}
-            style={styles.backButtonText}>
-            ←
-          </Text>
-        </TouchableOpacity>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header navigation={navigation} progress={170} />
       <Text style={styles.question}>We all want “stuff” so tap a few...</Text>
       <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -233,7 +223,7 @@ const MaterialDesiresScreen = ({
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -242,42 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: '#2c2c2c',
-    paddingVertical: 50,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
-    paddingTop: 10,
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{translateX: -15}],
-  },
-  progressBar: {
-    width: 170,
-    height: 5,
-    backgroundColor: '#CC6F35',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  backButton: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    alignSelf: 'flex-start',
-    marginLeft: 10,
-  },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '900',
+    paddingBottom: 50,
   },
   question: {
     color: '#fff',

@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {Context} from '../Context';
+import Header from './Header';
 
 const LifestyleScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
@@ -51,19 +52,7 @@ const LifestyleScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.progressBar} />
-        <TouchableOpacity style={styles.backButton}>
-          <Text
-            onPress={() => {
-              navigation.navigate('SplashScreen');
-            }}
-            style={styles.backButtonText}>
-            ←
-          </Text>
-        </TouchableOpacity>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
+      <Header navigation={navigation} progress={140} />
       <Text style={styles.question}>What is your ideal lifestyle?</Text>
       <FlatList
         contentContainerStyle={styles.optionsContainer}
@@ -86,41 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#2c2c2c',
     paddingVertical: 50,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
-    paddingTop: 10,
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{translateX: -15}],
-  },
-  progressBar: {
-    width: 140,
-    height: 5,
-    backgroundColor: '#CC6F35',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  backButton: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    alignSelf: 'flex-start',
-    marginLeft: 10,
-  },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '900',
   },
   question: {
     color: '#fff',
