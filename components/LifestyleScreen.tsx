@@ -31,9 +31,11 @@ const LifestyleScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
           : styles.optionButton
       }
       onPress={() => {
-        setSelectedOptions({...selectedOptions, lifestyle: item});
+        setSelectedOptions((prevState: any) => {
+          return {...prevState, lifestyle: item};
+        });
         setTimeout(() => {
-          // navigation.navigate('')
+          navigation.navigate('MaterialDesiresScreen');
         }, 500);
       }}>
       <Text

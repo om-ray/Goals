@@ -12,7 +12,6 @@ import {Context} from '../Context';
 
 const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
-
   const options = [
     'Become Famous',
     'Make Millions of Dollars',
@@ -31,7 +30,9 @@ const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
           : styles.optionButton
       }
       onPress={() => {
-        setSelectedOptions({...selectedOptions, purpose: item});
+        setSelectedOptions((prevState: any) => {
+          return {...prevState, purpose: item};
+        });
         setTimeout(() => {
           navigation.navigate('LifestyleScreen');
         }, 500);

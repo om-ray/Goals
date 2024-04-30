@@ -4,10 +4,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Splash from './components/Splash.tsx';
 import SplashScreen from './components/SplashScreen.tsx';
 import PurposeScreen from './components/PurposeScreen.tsx';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Context} from './Context.js';
 import LifestyleScreen from './components/LifestyleScreen.tsx';
 import MaterialDesiresScreen from './components/MaterialDesiresScreen.tsx';
+import PfpScreen from './components/PfpScreen.tsx';
 // import PfpScreen from './components/PfpScreen.tsx';
 // import SelfieScreen from './components/SelfieScreen.tsx';
 // import ProfileCTAScreen from './components/ProfileCTAScreen.tsx';
@@ -20,16 +21,18 @@ import MaterialDesiresScreen from './components/MaterialDesiresScreen.tsx';
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [selectedOptions, setSelectedOptions] = useState(
-    JSON.stringify({
-      purpose: '',
-      lifestyle: '',
-      materialDesires: [],
-      photos: [],
-      phoneNumber: '',
-      name: '',
-    }),
-  );
+  const [selectedOptions, setSelectedOptions] = useState({
+    purpose: '',
+    lifestyle: '',
+    materialDesires: {home: [], ride: [], style: [], misc: []},
+    photos: [],
+    phoneNumber: '',
+    name: '',
+  });
+
+  useEffect(() => {
+    console.log(selectedOptions);
+  }, [selectedOptions]);
 
   return (
     <NavigationContainer>
@@ -64,12 +67,12 @@ function App() {
             component={MaterialDesiresScreen}
             options={{headerShown: false}}
           />
-          {/*
           <Stack.Screen
-          name="PfpScreen"
-          component={PfpScreen}
-          options={{headerShown: false}}
+            name="PfpScreen"
+            component={PfpScreen}
+            options={{headerShown: false}}
           />
+          {/*
           <Stack.Screen
           name="SelfieScreen"
           component={SelfieScreen}
