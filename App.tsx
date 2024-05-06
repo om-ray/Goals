@@ -13,8 +13,8 @@ import CustomCamera from './components/CustomCamera.tsx';
 import ProfileCTAScreen from './components/ProfileCTAScreen.tsx';
 import PhoneNumberScreen from './components/PhoneNumberScreen.tsx';
 import AuthScreen from './components/AuthScreen.tsx';
-// import NameScreen from './components/NameScreen.tsx';
-// import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
+import NameScreen from './components/NameScreen.tsx';
+import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
 // import VisionBoardScreen from './components/VisionBoardScreen.tsx';
 
 const Stack = createNativeStackNavigator();
@@ -91,22 +91,21 @@ function App() {
             component={AuthScreen}
             options={{headerShown: false}}
           />
-          {/*
-        <Stack.Screen
-        name="NameScreen"
-        component={NameScreen}
-        options={{headerShown: false}}
-        />
-        <Stack.Screen
-        name="ProfileCompleteScreen"
-        component={ProfileCompleteScreen}
-        options={{headerShown: false}}
-        />
-        <Stack.Screen
-        name="VisionBoardScreen"
-        component={VisionBoardScreen}
-        options={{headerShown: false}}
-      /> */}
+          <Stack.Screen
+            name="NameScreen"
+            component={NameScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ProfileCompleteScreen"
+            component={ProfileCompleteScreen}
+            options={{headerShown: false}}
+          />
+          {/* <Stack.Screen
+            name="VisionBoardScreen"
+            component={VisionBoardScreen}
+            options={{headerShown: false}}
+          /> */}
         </Stack.Navigator>
       </Context.Provider>
     </NavigationContainer>

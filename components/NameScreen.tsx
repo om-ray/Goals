@@ -1,4 +1,5 @@
-import React, {useRef, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -6,60 +7,45 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  View,
 } from 'react-native';
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
+import {Context} from '../Context';
 
-function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
-  const numOfDigits = 5;
-  const [authCode, setAuthCode] = useState(new Array(numOfDigits).fill(''));
+function NameScreen({navigation}: {navigation: NavigationProp<any>}) {
+  const [name, setName] = useState('');
+  const {selectedOptions, setSelectedOptions} = useContext(Context);
 
-  const inputsRef = useRef<any[]>([]);
-  inputsRef.current = new Array(numOfDigits)
-    .fill(null)
-    .map((_, i) => inputsRef.current[i] ?? React.createRef());
-
-  const handleChange = (text: any, index: number) => {
-    const newCode = [...authCode];
-    newCode[index] = text;
-    setAuthCode(newCode);
-
-    if (text && index < numOfDigits - 1) {
-      inputsRef.current[index + 1].current.focus();
+  useEffect(() => {
+    if (selectedOptions.name) {
+      navigation.navigate('ProfileCompleteScreen');
     }
-
-    if (!text && index > 0) {
-      inputsRef.current[index - 1].current.focus();
-    }
-  };
+  }, [selectedOptions]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={navigation} progress={330} />
-      <Text style={styles.mainText}>Enter the code we sent you</Text>
-
-      <View style={styles.inputContainer}>
-        {authCode.map((digit, index) => (
-          <TextInput
-            key={index}
-            style={styles.input}
-            keyboardType="numeric"
-            maxLength={1}
-            onChangeText={text => handleChange(text, index)}
-            placeholder={`${index + 1}`}
-            ref={inputsRef.current[index]}
-            textAlign="center"
-          />
-        ))}
-      </View>
+      <Header navigation={navigation} progress={360} />
+      <Text style={styles.mainText}>What’s your first name?</Text>
+      <TextInput
+        autoFocus
+        style={styles.inputContainer}
+        placeholder="Arlin"
+        onChangeText={val => {
+          setName(val);
+        }}
+        value={name}
+      />
       <KeyboardAvoidingView
         keyboardVerticalOffset={20}
         behavior="position"
         style={styles.nextButtonContainer}>
-        {authCode.join('').length >= numOfDigits ? (
+        {name ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate('NameScreen')}
+            onPress={() => {
+              setSelectedOptions((prevState: any) => {
+                return {...prevState, name: name};
+              });
+            }}
             style={styles.nextButton}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
@@ -85,21 +71,18 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   inputContainer: {
-    flexDirection: 'row',
-    marginBottom: 500,
-  },
-  input: {
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     color: '#fff',
-    width: 60,
-    height: 60,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
     fontSize: 20,
+    width: 300,
     margin: 5,
-    fontFamily: 'Poppins-Medium',
+    marginBottom: 500,
   },
   nextButtonContainer: {
     width: '100%',
@@ -121,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AuthScreen;
+export default NameScreen;

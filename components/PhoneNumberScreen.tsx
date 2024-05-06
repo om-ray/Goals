@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -9,9 +10,11 @@ import {
 } from 'react-native';
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
+import {Context} from '../Context';
 
 function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const {selectedOptions, setSelectedOptions} = useContext(Context);
 
   const formatPhoneNumber = (text: string) => {
     const digits = text.replace(/[^\d]/g, '');
@@ -34,6 +37,12 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
     setPhoneNumber(formattedText);
   };
 
+  useEffect(() => {
+    if (selectedOptions.phoneNumber.length === 14) {
+      navigation.navigate('AuthScreen');
+    }
+  }, [selectedOptions]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header navigation={navigation} progress={300} />
@@ -52,7 +61,11 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
         style={styles.nextButtonContainer}>
         {phoneNumber.length >= 14 ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate('AuthScreen')}
+            onPress={() => {
+              setSelectedOptions((prevState: any) => {
+                return {...prevState, phoneNumber: phoneNumber};
+              });
+            }}
             style={styles.nextButton}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
@@ -102,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     width: 350,
-    height: 40,
+    height: 50,
   },
   nextButtonText: {
     color: '#fff',
