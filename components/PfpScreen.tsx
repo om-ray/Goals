@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import {
   PermissionsAndroid,
@@ -11,10 +12,14 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import Header from './Header';
+import {Context} from '../Context';
+import {useContext, useEffect} from 'react';
 
 const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
+  const {selectedOptions, setSelectedOptions} = useContext(Context);
+
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.requestMultiple([
@@ -51,28 +56,12 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   };
 
   const handleCamera = () => {
-    const options = {
-      saveToPhotos: true,
-      mediaType: 'photo' as 'photo',
-      includeBase64: false,
-    };
-    launchCamera(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled camera');
-      } else if (response.errorMessage) {
-        console.log('Camera Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const source = {uri: response.assets[0].uri};
-        console.log('New photo taken: ', source);
-      } else {
-        console.log('No assets returned from camera');
-      }
-    });
+    navigation.navigate('CustomCamera');
   };
 
   const handleGallery = () => {
     const options = {
-      selectionLimit: 0,
+      selectionLimit: 5,
       mediaType: 'photo' as 'photo',
       includeBase64: false,
     };
@@ -82,13 +71,24 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
       } else if (response.errorMessage) {
         console.log('Gallery Picker Error: ', response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
-        const source = {uri: response.assets[0].uri};
-        console.log('Photo selected: ', source);
+        let photosArr = response.assets.map(val => {
+          return val.uri;
+        });
+
+        setSelectedOptions((prevState: any) => {
+          return {...prevState, photos: photosArr};
+        });
       } else {
         console.log('No assets returned from gallery');
       }
     });
   };
+
+  useEffect(() => {
+    if (selectedOptions.photos.length > 0) {
+      navigation.navigate('ProfileCTAScreen');
+    }
+  }, [selectedOptions]);
 
   return (
     <SafeAreaView style={styles.container}>

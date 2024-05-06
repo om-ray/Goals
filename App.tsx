@@ -9,11 +9,10 @@ import {Context} from './Context.js';
 import LifestyleScreen from './components/LifestyleScreen.tsx';
 import MaterialDesiresScreen from './components/MaterialDesiresScreen.tsx';
 import PfpScreen from './components/PfpScreen.tsx';
-// import PfpScreen from './components/PfpScreen.tsx';
-// import SelfieScreen from './components/SelfieScreen.tsx';
-// import ProfileCTAScreen from './components/ProfileCTAScreen.tsx';
-// import PhoneNumberScreen from './components/PhoneNumberScreen.tsx';
-// import AuthScreen from './components/AuthScreen.tsx';
+import CustomCamera from './components/CustomCamera.tsx';
+import ProfileCTAScreen from './components/ProfileCTAScreen.tsx';
+import PhoneNumberScreen from './components/PhoneNumberScreen.tsx';
+import AuthScreen from './components/AuthScreen.tsx';
 // import NameScreen from './components/NameScreen.tsx';
 // import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
 // import VisionBoardScreen from './components/VisionBoardScreen.tsx';
@@ -72,27 +71,27 @@ function App() {
             component={PfpScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="CustomCamera"
+            component={CustomCamera}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ProfileCTAScreen"
+            component={ProfileCTAScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="PhoneNumberScreen"
+            component={PhoneNumberScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AuthScreen"
+            component={AuthScreen}
+            options={{headerShown: false}}
+          />
           {/*
-          <Stack.Screen
-          name="SelfieScreen"
-          component={SelfieScreen}
-          options={{headerShown: false}}
-          />
-          <Stack.Screen
-          name="ProfileCTAScreen"
-          component={ProfileCTAScreen}
-          options={{headerShown: false}}
-          />
-          <Stack.Screen
-          name="PhoneNumberScreen"
-          component={PhoneNumberScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-        name="AuthScreen"
-        component={AuthScreen}
-        options={{headerShown: false}}
-        />
         <Stack.Screen
         name="NameScreen"
         component={NameScreen}

@@ -7,14 +7,18 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "expo": "^50.0.17",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
     "react-native": "0.73.6",
+    "react-native-camera": "^4.2.1",
     "react-native-image-picker": "^7.1.2",
     "react-native-safe-area-context": "^4.10.1",
     "react-native-screens": "^3.30.1",
