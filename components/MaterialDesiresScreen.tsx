@@ -11,26 +11,44 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {Context} from '../Context';
 import {NavigationProp} from '@react-navigation/native';
 import Header from './Header';
+import Styles from './Style/Styles';
 
 const SelectableList = ({
   items,
   title,
   onSelect,
   selectedItems,
+  customItemsList,
+  setCustomItemsList,
+  section,
 }: {
   items: string[];
   title: string;
   onSelect: (item: string) => void;
   selectedItems: string[];
+  customItemsList: any;
+  setCustomItemsList: any;
+  section: string;
 }) => {
   const [inputFocused, setInputFocused] = useState(false);
   const [userInput, setUserInput] = useState('');
   const [itemsList, setItemsList] = useState([...items]);
   const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    const filteredItemsList = customItemsList[section].filter(
+      (item: string) => {
+        return selectedItems.includes(item);
+      },
+    );
+
+    setItemsList([...items, ...filteredItemsList]);
+  }, [selectedItems, customItemsList[section]]);
 
   const handleSelectCustomItem = (text: string) => {
     if (text) {
@@ -54,8 +72,8 @@ const SelectableList = ({
             <Text
               style={
                 selectedItems.includes(item)
-                  ? styles.itemTextSelected
-                  : styles.itemText
+                  ? Styles.textSmallSelected
+                  : Styles.textSmall
               }>
               {item}
             </Text>
@@ -84,8 +102,22 @@ const SelectableList = ({
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
             onSubmitEditing={({nativeEvent}) => {
-              setItemsList([...itemsList, nativeEvent.text]);
-              handleSelectCustomItem(nativeEvent.text);
+              const newItem = nativeEvent.text;
+
+              if (
+                newItem &&
+                !itemsList.includes(newItem) &&
+                !customItemsList[section].includes(newItem) &&
+                selectedItems.length < 3
+              ) {
+                let newCustomList = customItemsList;
+                newCustomList[section].push(newItem);
+                setCustomItemsList(newCustomList);
+                setItemsList((listOfItems: any) => [...listOfItems, newItem]);
+                handleSelectCustomItem(newItem);
+              } else if (selectedItems.length === 3) {
+                Alert.alert('', 'You can only select up to 3 items');
+              }
             }}
           />
         </TouchableOpacity>
@@ -105,6 +137,12 @@ const MaterialDesiresScreen = ({
   const [dreamRide, setDreamRide] = useState<string[]>([]);
   const [dreamStyle, setDreamStyle] = useState<string[]>([]);
   const [dreamMisc, setDreamMisc] = useState<string[]>([]);
+  const [customItemsList, setCustomItemsList] = useState<any>({
+    home: [],
+    ride: [],
+    style: [],
+    misc: [],
+  });
 
   useEffect(() => {
     const newMaterialDesires = {
@@ -130,30 +168,44 @@ const MaterialDesiresScreen = ({
   }, [dreamHome, dreamRide, dreamStyle, dreamMisc]);
 
   const toggleSelection = (
-    item: any,
-    selectedItems: any[],
+    item: string,
+    selectedItems: string[],
     setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>,
+    section: string,
   ) => {
     if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((i: any) => i !== item));
+      const newSelectedItems = selectedItems.filter(i => i !== item);
+      setSelectedItems(newSelectedItems);
+
+      if (customItemsList[section].includes(item)) {
+        const newCustomItemsList = {
+          ...customItemsList,
+          [section]: customItemsList[section].filter((i: string) => i !== item),
+        };
+        setCustomItemsList(newCustomItemsList);
+      }
     } else {
-      setSelectedItems([...selectedItems, item]);
+      if (selectedItems.length < 3) {
+        setSelectedItems([...selectedItems, item]);
+      } else {
+        Alert.alert('', 'You can only select up to 3 items');
+      }
     }
   };
 
   const handleSelectHome = (item: string) =>
-    toggleSelection(item, dreamHome, setDreamHome);
+    toggleSelection(item, dreamHome, setDreamHome, 'home');
   const handleSelectRide = (item: string) =>
-    toggleSelection(item, dreamRide, setDreamRide);
+    toggleSelection(item, dreamRide, setDreamRide, 'ride');
   const handleSelectStyle = (item: string) =>
-    toggleSelection(item, dreamStyle, setDreamStyle);
+    toggleSelection(item, dreamStyle, setDreamStyle, 'style');
   const handleSelectMisc = (item: string) =>
-    toggleSelection(item, dreamMisc, setDreamMisc);
+    toggleSelection(item, dreamMisc, setDreamMisc, 'misc');
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={170} />
-      <Text style={styles.question}>We all want “stuff” so tap a few...</Text>
+      <Text style={Styles.mainText}>We all want “stuff” so tap a few...</Text>
       <ScrollView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View>
@@ -171,6 +223,9 @@ const MaterialDesiresScreen = ({
               ]}
               onSelect={handleSelectHome}
               selectedItems={dreamHome}
+              customItemsList={customItemsList}
+              setCustomItemsList={setCustomItemsList}
+              section="home"
             />
             <SelectableList
               title="Dream ride 🚗"
@@ -187,6 +242,9 @@ const MaterialDesiresScreen = ({
               ]}
               onSelect={handleSelectRide}
               selectedItems={dreamRide}
+              customItemsList={customItemsList}
+              setCustomItemsList={setCustomItemsList}
+              section="ride"
             />
             <SelectableList
               title="Dream style 👔"
@@ -203,6 +261,9 @@ const MaterialDesiresScreen = ({
               ]}
               onSelect={handleSelectStyle}
               selectedItems={dreamStyle}
+              customItemsList={customItemsList}
+              setCustomItemsList={setCustomItemsList}
+              section="style"
             />
             <SelectableList
               title="Dream misc. 💰"
@@ -219,6 +280,9 @@ const MaterialDesiresScreen = ({
               ]}
               onSelect={handleSelectMisc}
               selectedItems={dreamMisc}
+              customItemsList={customItemsList}
+              setCustomItemsList={setCustomItemsList}
+              section="misc"
             />
           </View>
         </TouchableWithoutFeedback>
@@ -228,32 +292,14 @@ const MaterialDesiresScreen = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
-    paddingBottom: 50,
-  },
-  question: {
-    color: '#fff',
-    fontSize: 25,
-    marginTop: 40,
-    marginBottom: 20,
-    fontFamily: 'Bodoni-72-Book',
-    letterSpacing: -1.9,
-    width: '100%',
-    textAlign: 'center',
-  },
   listContainer: {
     marginVertical: 20,
   },
   title: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: 'Bodoni-72-Book',
+    ...Styles.textSmall,
+    fontFamily: 'Poppins-SemiBold',
     paddingHorizontal: 20,
     paddingBottom: 10,
-    letterSpacing: -1,
   },
   view: {
     paddingLeft: 10,
@@ -274,14 +320,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  itemText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  itemTextSelected: {
-    color: '#000',
-    fontSize: 16,
-  },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -289,11 +327,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 1,
-    color: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    fontSize: 16,
-    width: 250,
+    ...Styles.textSmall,
+    width: '80%',
     margin: 5,
   },
   inputContainerFocused: {
@@ -303,20 +340,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 1,
-    color: '#fff',
-    paddingHorizontal: 20,
+    paddingHorizontal: 'auto',
     paddingVertical: 10,
-    fontSize: 16,
-    width: '90%',
+    ...Styles.textSmall,
+    width: '95%',
     margin: 5,
   },
   inputPlaceholder: {
     padding: 10,
     marginRight: 10,
+    marginLeft: -30,
     opacity: 0.2,
   },
   input: {
-    width: 100,
+    width: 'auto',
     color: '#fff',
   },
 });

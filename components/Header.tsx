@@ -1,6 +1,7 @@
 import {NavigationProp} from '@react-navigation/native';
 import React from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
+import Styles from './Style/Styles';
 
 function Header({
   navigation,
@@ -10,7 +11,7 @@ function Header({
   progress: number;
 }) {
   return (
-    <View style={styles.headerContainer}>
+    <View style={Styles.headerContainer}>
       <View id="progressBar" style={{...styles.progressBar, width: progress}} />
       <TouchableOpacity style={styles.backButton}>
         <Text
@@ -27,12 +28,6 @@ function Header({
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
-  },
   logo: {
     width: 30,
     height: 30,

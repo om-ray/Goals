@@ -5,9 +5,10 @@ import {RNCamera} from 'react-native-camera';
 import Svg, {Circle} from 'react-native-svg';
 import {NavigationProp} from '@react-navigation/native';
 import {Context} from '../Context';
+import Styles from './Style/Styles';
 
 const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
-  const [selectedOptions, setSelectedOptions] = useContext(Context);
+  const {selectedOptions, setSelectedOptions} = useContext(Context);
 
   const takePicture = async (camera: any) => {
     const options = {quality: 0.5, base64: true};
@@ -114,10 +115,7 @@ const styles = StyleSheet.create({
     bottom: 50,
   },
   headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    height: 40,
+    ...Styles.headerContainer,
     position: 'absolute',
     top: 40,
   },
@@ -137,8 +135,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   backButtonText: {
-    color: '#fff',
-    fontSize: 30,
+    ...Styles.textExtraLarge,
     fontWeight: '900',
   },
 });

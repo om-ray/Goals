@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
+import Styles from './Style/Styles';
 
 const SplashScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   return (
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   title: {
-    color: '#fff',
-    fontSize: 18,
+    ...Styles.textMedium,
     marginBottom: 40,
     textAlign: 'center',
     fontFamily: 'Poppins-Medium',
@@ -71,16 +71,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    ...Styles.textMedium,
     fontFamily: 'Poppins-ExtraBold',
   },
   termsText: {
-    color: '#fff',
-    fontSize: 12,
     textAlign: 'center',
     paddingHorizontal: 10,
     fontFamily: 'Poppins-Regular',
+    ...Styles.textExtraSmall,
   },
   linkText: {
     fontFamily: 'Poppins-SemiBold',

@@ -16,6 +16,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Header from './Header';
 import {Context} from '../Context';
 import {useContext, useEffect} from 'react';
+import Styles from './Style/Styles';
 
 const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
@@ -91,37 +92,37 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   }, [selectedOptions]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={220} />
-      <Text style={styles.question}>Take or upload 1-5 photos</Text>
+      <Text style={Styles.mainText}>Take or upload 1-5 photos</Text>
       <TouchableOpacity onPress={requestCameraPermission}>
         <Image
           style={styles.addPhoto}
           source={require('../assets/AddPhoto.png')}
         />
       </TouchableOpacity>
-      <View style={styles.requirements}>
+      <View style={Styles.contentContainer}>
         <View style={styles.requirementItem}>
           <Image
-            style={styles.checkIcon}
+            style={styles.icon}
             source={require('../assets/CheckMark.png')}
           />
-          <Text style={styles.requirementText}>Face only</Text>
+          <Text style={Styles.textSmall}>Face only</Text>
         </View>
         <View style={styles.requirementItem}>
           <Image
-            style={styles.checkIcon}
+            style={styles.icon}
             source={require('../assets/CheckMark.png')}
           />
-          <Text style={styles.requirementText}>Well-lit and in focus</Text>
+          <Text style={Styles.textSmall}>Well-lit and in focus</Text>
         </View>
         <View style={styles.requirementItem}>
-          <Image style={styles.xIcon} source={require('../assets/XMark.png')} />
-          <Text style={styles.requirementText}>No full length</Text>
+          <Image style={styles.icon} source={require('../assets/XMark.png')} />
+          <Text style={Styles.textSmall}>No full length</Text>
         </View>
         <View style={styles.requirementItem}>
-          <Image style={styles.xIcon} source={require('../assets/XMark.png')} />
-          <Text style={styles.requirementText}>No hats, glasses, etc.</Text>
+          <Image style={styles.icon} source={require('../assets/XMark.png')} />
+          <Text style={Styles.textSmall}>No hats, glasses, etc.</Text>
         </View>
       </View>
       <Text style={styles.footerText}>
@@ -132,31 +133,10 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
-  },
-  question: {
-    color: '#fff',
-    fontSize: 25,
-    fontFamily: 'Bodoni-72-Book',
-    letterSpacing: -1.9,
-    marginTop: 70,
-    marginBottom: 50,
-  },
   addPhoto: {
     width: 160,
     height: 160,
     marginBottom: 40,
-  },
-  requirements: {
-    display: 'flex',
-    width: '100%',
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   requirementItem: {
     flexDirection: 'row',
@@ -164,19 +144,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     minWidth: 200,
   },
-  checkIcon: {
+  icon: {
     width: 24,
     height: 24,
     marginRight: 10,
-  },
-  xIcon: {
-    width: 24,
-    height: 24,
-    marginRight: 10,
-  },
-  requirementText: {
-    color: '#fff',
-    fontSize: 16,
   },
   footerText: {
     textAlign: 'center',

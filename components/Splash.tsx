@@ -2,6 +2,7 @@ import * as React from 'react';
 const {useEffect} = React;
 import {StyleSheet, View, Image} from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
+import Styles from './Style/Styles';
 
 const Splash = ({navigation}: {navigation: NavigationProp<any>}) => {
   useEffect(() => {
@@ -21,10 +22,7 @@ const Splash = ({navigation}: {navigation: NavigationProp<any>}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
+    ...Styles.container,
     padding: 200,
   },
   logo: {

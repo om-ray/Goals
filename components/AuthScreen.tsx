@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
+import Styles from './Style/Styles';
 
 function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
   const numOfDigits = 5;
@@ -35,9 +36,9 @@ function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={330} />
-      <Text style={styles.mainText}>Enter the code we sent you</Text>
+      <Text style={Styles.mainText}>Enter the code we sent you</Text>
 
       <View style={styles.inputContainer}>
         {authCode.map((digit, index) => (
@@ -56,12 +57,12 @@ function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
       <KeyboardAvoidingView
         keyboardVerticalOffset={20}
         behavior="position"
-        style={styles.nextButtonContainer}>
+        style={Styles.buttonContainer}>
         {authCode.join('').length >= numOfDigits ? (
           <TouchableOpacity
             onPress={() => navigation.navigate('NameScreen')}
-            style={styles.nextButton}>
-            <Text style={styles.nextButtonText}>Next</Text>
+            style={Styles.button}>
+            <Text style={Styles.buttonText}>Next</Text>
           </TouchableOpacity>
         ) : null}
       </KeyboardAvoidingView>
@@ -70,20 +71,6 @@ function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
-  },
-  mainText: {
-    color: '#fff',
-    fontSize: 25,
-    fontFamily: 'Bodoni-72-Book',
-    letterSpacing: -1.9,
-    marginTop: 70,
-    marginBottom: 30,
-  },
   inputContainer: {
     flexDirection: 'row',
     marginBottom: 500,
@@ -94,30 +81,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    color: '#fff',
     width: 60,
     height: 60,
-    fontSize: 20,
+    ...Styles.textMedium,
     margin: 5,
     fontFamily: 'Poppins-Medium',
-  },
-  nextButtonContainer: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  nextButton: {
-    backgroundColor: '#CC6F35',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    width: 350,
-    height: 50,
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontFamily: 'Poppins-ExtraBold',
-    fontSize: 16,
   },
 });
 

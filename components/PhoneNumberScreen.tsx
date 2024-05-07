@@ -3,7 +3,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
   SafeAreaView,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -11,6 +10,7 @@ import {
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
 import {Context} from '../Context';
+import Styles from './Style/Styles';
 
 function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -44,13 +44,13 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
   }, [selectedOptions]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={300} />
-      <Text style={styles.mainText}>Type your phone number.</Text>
+      <Text style={Styles.mainText}>Type your phone number.</Text>
       <TextInput
         keyboardType="numeric"
         autoFocus
-        style={styles.inputContainer}
+        style={Styles.defaultInput}
         placeholder="(XXX) XXX-XXXX"
         onChangeText={handleChange}
         value={phoneNumber}
@@ -58,7 +58,7 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
       <KeyboardAvoidingView
         keyboardVerticalOffset={20}
         behavior="position"
-        style={styles.nextButtonContainer}>
+        style={Styles.buttonContainer}>
         {phoneNumber.length >= 14 ? (
           <TouchableOpacity
             onPress={() => {
@@ -66,62 +66,13 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
                 return {...prevState, phoneNumber: phoneNumber};
               });
             }}
-            style={styles.nextButton}>
-            <Text style={styles.nextButtonText}>Next</Text>
+            style={Styles.button}>
+            <Text style={Styles.buttonText}>Next</Text>
           </TouchableOpacity>
         ) : null}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
-  },
-  mainText: {
-    color: '#fff',
-    fontSize: 25,
-    fontFamily: 'Bodoni-72-Book',
-    letterSpacing: -1.9,
-    marginTop: 70,
-    marginBottom: 30,
-  },
-  inputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    borderRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    color: '#fff',
-    paddingHorizontal: 30,
-    paddingVertical: 20,
-    fontSize: 20,
-    width: 300,
-    margin: 5,
-    marginBottom: 500,
-  },
-  nextButtonContainer: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  nextButton: {
-    backgroundColor: '#CC6F35',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    width: 350,
-    height: 50,
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontFamily: 'Poppins-ExtraBold',
-    fontSize: 16,
-  },
-});
 
 export default PhoneNumberScreen;

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
+import Styles from './Style/Styles';
 
 function ProfileCTAScreen({navigation}: {navigation: NavigationProp<any>}) {
   const [percentageDone, setPercentageDone] = useState(24.7);
@@ -28,10 +29,10 @@ function ProfileCTAScreen({navigation}: {navigation: NavigationProp<any>}) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={260} />
-      <Text style={styles.mainText}>Generating...</Text>
-      <View style={styles.contentContainer}>
+      <Text style={Styles.mainText}>Generating...</Text>
+      <View style={Styles.contentContainer}>
         <View style={styles.contentItem}>
           <Image source={require('../assets/ProfileCtaBlurImage.png')} />
           <View style={styles.imageGenContentContainer}>
@@ -49,27 +50,6 @@ function ProfileCTAScreen({navigation}: {navigation: NavigationProp<any>}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2c2c2c',
-  },
-  mainText: {
-    color: '#fff',
-    fontSize: 25,
-    fontFamily: 'Bodoni-72-Book',
-    letterSpacing: -1.9,
-    marginTop: 70,
-    marginBottom: 50,
-  },
-  contentContainer: {
-    display: 'flex',
-    width: '100%',
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   contentItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -90,20 +70,17 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   percentageText: {
-    color: '#fff',
-    fontSize: 30,
+    ...Styles.textExtraLarge,
     fontFamily: 'Poppins-SemiBold',
   },
   etaText: {
-    color: '#fff',
-    fontSize: 12,
+    ...Styles.textExtraSmall,
     fontFamily: 'Poppins',
   },
   footerText: {
     textAlign: 'center',
     width: '50%',
-    color: '#fff',
-    fontSize: 20,
+    ...Styles.textMedium,
     position: 'absolute',
     bottom: 170,
     fontFamily: 'Poppins-Medium',
