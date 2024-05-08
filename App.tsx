@@ -15,16 +15,22 @@ import PhoneNumberScreen from './components/PhoneNumberScreen.tsx';
 import AuthScreen from './components/AuthScreen.tsx';
 import NameScreen from './components/NameScreen.tsx';
 import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
-// import VisionBoardScreen from './components/VisionBoardScreen.tsx';
+import VisionBoardScreen from './components/VisionBoardScreen.tsx';
+import {Platform, Linking} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
+const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
 
 function App() {
+  const [isReady, setIsReady] = useState(Platform.OS === 'web');
+  const [initialState, setInitialState] = useState();
   const [selectedOptions, setSelectedOptions] = useState({
     purpose: '',
     lifestyle: '',
     materialDesires: {home: [], ride: [], style: [], misc: []},
     photos: [],
+    verified: false,
     phoneNumber: '',
     name: '',
   });
@@ -33,8 +39,41 @@ function App() {
     console.log(selectedOptions);
   }, [selectedOptions]);
 
+  useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const initialUrl = await Linking.getInitialURL();
+
+        if (initialUrl == null) {
+          const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
+          const state = savedStateString
+            ? JSON.parse(savedStateString)
+            : undefined;
+
+          if (state !== undefined) {
+            setInitialState(state);
+          }
+        }
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) {
+      restoreState();
+    }
+  }, [isReady]);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      initialState={initialState}
+      onStateChange={state =>
+        AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
+      }>
       <Context.Provider
         value={{
           selectedOptions: selectedOptions,
@@ -101,11 +140,11 @@ function App() {
             component={ProfileCompleteScreen}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="VisionBoardScreen"
             component={VisionBoardScreen}
             options={{headerShown: false}}
-          /> */}
+          />
         </Stack.Navigator>
       </Context.Provider>
     </NavigationContainer>

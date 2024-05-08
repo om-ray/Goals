@@ -15,7 +15,7 @@ function ProfileCompleteScreen({
   });
 
   return (
-    <View style={Styles.container}>
+    <View style={Styles.containerCenter}>
       <Image
         resizeMethod="scale"
         resizeMode="contain"

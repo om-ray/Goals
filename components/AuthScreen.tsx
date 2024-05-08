@@ -1,4 +1,5 @@
-import React, {useRef, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -11,8 +12,10 @@ import {
 import Header from './Header';
 import {NavigationProp} from '@react-navigation/native';
 import Styles from './Style/Styles';
+import {Context} from '../Context';
 
 function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
+  const {selectedOptions, setSelectedOptions} = useContext(Context);
   const numOfDigits = 5;
   const [authCode, setAuthCode] = useState(new Array(numOfDigits).fill(''));
 
@@ -35,14 +38,23 @@ function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
     }
   };
 
+  useEffect(() => {
+    if (selectedOptions.verified) {
+      navigation.navigate('NameScreen');
+    }
+  }, [selectedOptions]);
+
   return (
     <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={330} />
-      <Text style={Styles.mainText}>Enter the code we sent you</Text>
+      <Text style={Styles.mainTextMarginBottom}>
+        Enter the code we sent you
+      </Text>
 
       <View style={styles.inputContainer}>
         {authCode.map((digit, index) => (
           <TextInput
+            autoFocus={index === 0}
             key={index}
             style={styles.input}
             keyboardType="numeric"
@@ -60,7 +72,11 @@ function AuthScreen({navigation}: {navigation: NavigationProp<any>}) {
         style={Styles.buttonContainer}>
         {authCode.join('').length >= numOfDigits ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate('NameScreen')}
+            onPress={() => {
+              setSelectedOptions((prevState: any) => {
+                return {...prevState, verified: true};
+              });
+            }}
             style={Styles.button}>
             <Text style={Styles.buttonText}>Next</Text>
           </TouchableOpacity>

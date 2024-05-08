@@ -46,7 +46,7 @@ function PhoneNumberScreen({navigation}: {navigation: NavigationProp<any>}) {
   return (
     <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={300} />
-      <Text style={Styles.mainText}>Type your phone number.</Text>
+      <Text style={Styles.mainTextMarginBottom}>Type your phone number.</Text>
       <TextInput
         keyboardType="numeric"
         autoFocus

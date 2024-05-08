@@ -25,7 +25,7 @@ function NameScreen({navigation}: {navigation: NavigationProp<any>}) {
   return (
     <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={360} />
-      <Text style={Styles.mainText}>What’s your first name?</Text>
+      <Text style={Styles.mainTextMarginBottom}>What’s your first name?</Text>
       <TextInput
         autoFocus
         style={Styles.defaultInput}

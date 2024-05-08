@@ -18,6 +18,9 @@ import {NavigationProp} from '@react-navigation/native';
 import Header from './Header';
 import Styles from './Style/Styles';
 
+const alertMessage =
+  'You can only select 3 items. You can deselect items by tapping on them again';
+
 const SelectableList = ({
   items,
   title,
@@ -98,6 +101,7 @@ const SelectableList = ({
             placeholder="type your own"
             placeholderTextColor="#888"
             value={userInput}
+            maxLength={32}
             onChangeText={setUserInput}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
@@ -116,7 +120,7 @@ const SelectableList = ({
                 setItemsList((listOfItems: any) => [...listOfItems, newItem]);
                 handleSelectCustomItem(newItem);
               } else if (selectedItems.length === 3) {
-                Alert.alert('', 'You can only select up to 3 items');
+                Alert.alert('', alertMessage);
               }
             }}
           />
@@ -188,7 +192,7 @@ const MaterialDesiresScreen = ({
       if (selectedItems.length < 3) {
         setSelectedItems([...selectedItems, item]);
       } else {
-        Alert.alert('', 'You can only select up to 3 items');
+        Alert.alert('', alertMessage);
       }
     }
   };

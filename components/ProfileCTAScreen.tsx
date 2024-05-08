@@ -31,7 +31,7 @@ function ProfileCTAScreen({navigation}: {navigation: NavigationProp<any>}) {
   return (
     <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={260} />
-      <Text style={Styles.mainText}>Generating...</Text>
+      <Text style={Styles.mainTextMarginBottom}>Generating...</Text>
       <View style={Styles.contentContainer}>
         <View style={styles.contentItem}>
           <Image source={require('../assets/ProfileCtaBlurImage.png')} />

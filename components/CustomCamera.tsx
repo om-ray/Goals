@@ -15,7 +15,7 @@ const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
     const data = await camera.takePictureAsync(options);
 
     setSelectedOptions((prevState: any) => {
-      return {...prevState, photos: data.uri};
+      return {...prevState, photos: [data.uri]};
     });
   };
 

@@ -37,6 +37,12 @@ const Styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: '#2c2c2c',
   },
+  containerCenter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2c2c2c',
+  },
   mainText: {
     color: '#fff',
     fontSize: largeText,
@@ -44,6 +50,14 @@ const Styles = StyleSheet.create({
     letterSpacing: -1,
     marginTop: 50,
     marginBottom: 0,
+  },
+  mainTextMarginBottom: {
+    color: '#fff',
+    fontSize: largeText,
+    fontFamily: 'Poppins-SemiBold',
+    letterSpacing: -1,
+    marginTop: 50,
+    marginBottom: 40,
   },
   optionsContainer: {
     width: '100%',
@@ -109,6 +123,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
+    flexDirection: 'row',
     backgroundColor: '#CC6F35',
     alignItems: 'center',
     justifyContent: 'center',
@@ -120,6 +135,10 @@ const Styles = StyleSheet.create({
     color: '#fff',
     fontSize: smallText,
     fontFamily: 'Poppins-ExtraBold',
+  },
+  buttonIcon: {
+    width: 15,
+    margin: 5,
   },
   defaultInput: {
     justifyContent: 'center',

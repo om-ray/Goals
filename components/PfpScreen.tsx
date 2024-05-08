@@ -94,7 +94,7 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   return (
     <SafeAreaView style={Styles.container}>
       <Header navigation={navigation} progress={220} />
-      <Text style={Styles.mainText}>Take or upload 1-5 photos</Text>
+      <Text style={Styles.mainTextMarginBottom}>Take or upload 1-5 photos</Text>
       <TouchableOpacity onPress={requestCameraPermission}>
         <Image
           style={styles.addPhoto}
