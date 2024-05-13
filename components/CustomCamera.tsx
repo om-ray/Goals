@@ -15,7 +15,7 @@ const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
     const data = await camera.takePictureAsync(options);
 
     setSelectedOptions((prevState: any) => {
-      return {...prevState, photos: [data.uri]};
+      return {...prevState, userPhotos: [data.uri]};
     });
   };
 
@@ -51,7 +51,7 @@ const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
   };
 
   useEffect(() => {
-    if (selectedOptions.photos.length > 0) {
+    if (selectedOptions.userPhotos.length > 0) {
       navigation.navigate('ProfileCTAScreen');
     }
   }, [selectedOptions]);

@@ -77,7 +77,7 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
         });
 
         setSelectedOptions((prevState: any) => {
-          return {...prevState, photos: photosArr};
+          return {...prevState, userPhotos: photosArr};
         });
       } else {
         console.log('No assets returned from gallery');
@@ -86,7 +86,7 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   };
 
   useEffect(() => {
-    if (selectedOptions.photos.length > 0) {
+    if (selectedOptions.userPhotos.length > 0) {
       navigation.navigate('ProfileCTAScreen');
     }
   }, [selectedOptions]);

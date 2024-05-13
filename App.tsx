@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useEffect, useState} from 'react';
+import {Platform} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Splash from './components/Splash.tsx';
 import SplashScreen from './components/SplashScreen.tsx';
 import PurposeScreen from './components/PurposeScreen.tsx';
-import {useEffect, useState} from 'react';
-import {Context} from './Context.js';
 import LifestyleScreen from './components/LifestyleScreen.tsx';
 import MaterialDesiresScreen from './components/MaterialDesiresScreen.tsx';
 import PfpScreen from './components/PfpScreen.tsx';
@@ -16,11 +17,11 @@ import AuthScreen from './components/AuthScreen.tsx';
 import NameScreen from './components/NameScreen.tsx';
 import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
 import VisionBoardScreen from './components/VisionBoardScreen.tsx';
-import {Platform, Linking} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Context} from './Context.js';
 
 const Stack = createNativeStackNavigator();
 const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
+export const SELECTED_OPTIONS_KEY = 'SELECTED_OPTIONS';
 
 function App() {
   const [isReady, setIsReady] = useState(Platform.OS === 'web');
@@ -29,31 +30,44 @@ function App() {
     purpose: '',
     lifestyle: '',
     materialDesires: {home: [], ride: [], style: [], misc: []},
-    photos: [],
+    userPhotos: [],
     verified: false,
     phoneNumber: '',
     name: '',
   });
 
   useEffect(() => {
-    console.log(selectedOptions);
+    const restoreSelectedOptions = async () => {
+      try {
+        const savedOptions = await AsyncStorage.getItem(SELECTED_OPTIONS_KEY);
+        if (savedOptions) {
+          setSelectedOptions(JSON.parse(savedOptions));
+          console.log('Selected options restored');
+        }
+      } catch (error) {
+        console.error('Failed to restore selected options', error);
+      }
+    };
+
+    restoreSelectedOptions();
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem(SELECTED_OPTIONS_KEY, JSON.stringify(selectedOptions))
+      .then(() => console.log('Selected options saved'))
+      .catch(error => console.error('Failed to save selected options', error));
   }, [selectedOptions]);
 
   useEffect(() => {
     const restoreState = async () => {
       try {
-        const initialUrl = await Linking.getInitialURL();
-
-        if (initialUrl == null) {
-          const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-          const state = savedStateString
-            ? JSON.parse(savedStateString)
-            : undefined;
-
-          if (state !== undefined) {
-            setInitialState(state);
-          }
+        const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
+        if (savedStateString) {
+          const state = JSON.parse(savedStateString);
+          setInitialState(state);
         }
+      } catch (e) {
+        console.error('Failed to load navigation state', e);
       } finally {
         setIsReady(true);
       }
@@ -63,10 +77,6 @@ function App() {
       restoreState();
     }
   }, [isReady]);
-
-  if (!isReady) {
-    return null;
-  }
 
   return (
     <NavigationContainer

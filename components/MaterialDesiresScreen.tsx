@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useRef, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,10 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import {Context} from '../Context';
 import {NavigationProp} from '@react-navigation/native';
 import Header from './Header';
 import Styles from './Style/Styles';
+import {Context} from '../Context';
 
 const alertMessage =
   'You can only select 3 items. You can deselect items by tapping on them again';
@@ -44,12 +44,9 @@ const SelectableList = ({
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    const filteredItemsList = customItemsList[section].filter(
-      (item: string) => {
-        return selectedItems.includes(item);
-      },
+    const filteredItemsList = customItemsList[section].filter((item: string) =>
+      selectedItems.includes(item),
     );
-
     setItemsList([...items, ...filteredItemsList]);
   }, [selectedItems, customItemsList[section]]);
 
@@ -106,18 +103,17 @@ const SelectableList = ({
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
             onSubmitEditing={({nativeEvent}) => {
-              const newItem = nativeEvent.text;
-
+              const newItem = nativeEvent.text.trim();
               if (
                 newItem &&
                 !itemsList.includes(newItem) &&
-                !customItemsList[section].includes(newItem) &&
                 selectedItems.length < 3
               ) {
-                let newCustomList = customItemsList;
-                newCustomList[section].push(newItem);
-                setCustomItemsList(newCustomList);
-                setItemsList((listOfItems: any) => [...listOfItems, newItem]);
+                setCustomItemsList((prevCustom: any) => ({
+                  ...prevCustom,
+                  [section]: [...prevCustom[section], newItem],
+                }));
+                setItemsList(prevItems => [...prevItems, newItem]);
                 handleSelectCustomItem(newItem);
               } else if (selectedItems.length === 3) {
                 Alert.alert('', alertMessage);
@@ -149,11 +145,55 @@ const MaterialDesiresScreen = ({
   });
 
   useEffect(() => {
+    const initializeSelections = () => {
+      const sections = ['home', 'ride', 'style', 'misc'];
+      const newCustomItems = {...customItemsList};
+
+      sections.forEach(section => {
+        const contextItems = selectedOptions.materialDesires[section];
+        const stateSetter = {
+          home: setDreamHome,
+          ride: setDreamRide,
+          style: setDreamStyle,
+          misc: setDreamMisc,
+        }[section];
+
+        const newItems = contextItems.filter((item: any) => {
+          if (
+            !customItemsList[section].includes(item) &&
+            !item.includes(item)
+          ) {
+            newCustomItems[section].push(item);
+            return true;
+          }
+          return item.includes(item);
+        });
+
+        if (stateSetter) {
+          stateSetter([...contextItems, ...newItems]);
+        }
+      });
+
+      setCustomItemsList(newCustomItems);
+    };
+
+    initializeSelections();
+    if (
+      dreamHome.length >= 1 &&
+      dreamRide.length >= 1 &&
+      dreamStyle.length >= 1 &&
+      dreamMisc.length >= 1
+    ) {
+      navigation.navigate('PfpScreen');
+    }
+  }, []);
+
+  useEffect(() => {
     const newMaterialDesires = {
-      home: dreamHome,
-      ride: dreamRide,
-      style: dreamStyle,
-      misc: dreamMisc,
+      home: [...dreamHome],
+      ride: [...dreamRide],
+      style: [...dreamStyle],
+      misc: [...dreamMisc],
     };
 
     setSelectedOptions({
@@ -173,8 +213,14 @@ const MaterialDesiresScreen = ({
 
   const toggleSelection = (
     item: string,
-    selectedItems: string[],
-    setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>,
+    selectedItems: any[],
+    setSelectedItems: {
+      (value: React.SetStateAction<string[]>): void;
+      (value: React.SetStateAction<string[]>): void;
+      (value: React.SetStateAction<string[]>): void;
+      (value: React.SetStateAction<string[]>): void;
+      (arg0: any[]): void;
+    },
     section: string,
   ) => {
     if (selectedItems.includes(item)) {
