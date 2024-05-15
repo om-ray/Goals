@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -17,6 +18,7 @@ import AuthScreen from './components/AuthScreen.tsx';
 import NameScreen from './components/NameScreen.tsx';
 import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
 import VisionBoardScreen from './components/VisionBoardScreen.tsx';
+import storage from '@react-native-firebase/storage';
 import {Context} from './Context.js';
 
 const Stack = createNativeStackNavigator();
@@ -31,10 +33,37 @@ function App() {
     lifestyle: '',
     materialDesires: {home: [], ride: [], style: [], misc: []},
     userPhotos: [],
+    userPhotosDownloadURIs: [],
     verified: false,
     phoneNumber: '',
     name: '',
   });
+
+  const uploadImage = async (imageUri: string) => {
+    if (!imageUri) {
+      console.error('No image URI provided');
+      return;
+    }
+
+    const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+    const uploadUri =
+      Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
+
+    const task = storage().ref(filename).putFile(uploadUri);
+
+    try {
+      await task;
+      const url = await storage().ref(filename).getDownloadURL();
+      console.log(selectedOptions.userPhotosDownloadURIs);
+
+      setSelectedOptions((prevState: any) => ({
+        ...prevState,
+        userPhotosDownloadURIs: [url],
+      }));
+    } catch (e) {
+      console.error('Error uploading image:', e);
+    }
+  };
 
   useEffect(() => {
     const restoreSelectedOptions = async () => {
@@ -56,6 +85,18 @@ function App() {
     AsyncStorage.setItem(SELECTED_OPTIONS_KEY, JSON.stringify(selectedOptions))
       .then(() => console.log('Selected options saved'))
       .catch(error => console.error('Failed to save selected options', error));
+
+    console.log(selectedOptions);
+
+    if (
+      selectedOptions.userPhotos.length > 0 &&
+      selectedOptions.userPhotosDownloadURIs.length !==
+        selectedOptions.userPhotos.length
+    ) {
+      selectedOptions.userPhotos.map((imageURI: string) => {
+        uploadImage(imageURI);
+      });
+    }
   }, [selectedOptions]);
 
   useEffect(() => {

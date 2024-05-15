@@ -23,8 +23,8 @@ function ProfileCTAScreen({navigation}: {navigation: NavigationProp<any>}) {
     }, 500);
 
     setTimeout(() => {
-      navigation.navigate('PhoneNumberScreen');
       clearInterval(progressInterval);
+      navigation.navigate('PhoneNumberScreen');
     }, 3000);
   }, []);
 

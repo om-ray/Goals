@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import {
   PermissionsAndroid,
   Platform,
@@ -15,7 +15,7 @@ import {NavigationProp} from '@react-navigation/native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Header from './Header';
 import {Context} from '../Context';
-import {useContext, useEffect} from 'react';
+import {useContext} from 'react';
 import Styles from './Style/Styles';
 
 const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
@@ -76,6 +76,8 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
           return val.uri;
         });
 
+        navigation.navigate('ProfileCTAScreen');
+
         setSelectedOptions((prevState: any) => {
           return {...prevState, userPhotos: photosArr};
         });
@@ -89,7 +91,7 @@ const PfpScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
     if (selectedOptions.userPhotos.length > 0) {
       navigation.navigate('ProfileCTAScreen');
     }
-  }, [selectedOptions]);
+  }, []);
 
   return (
     <SafeAreaView style={Styles.container}>

@@ -27,65 +27,69 @@ const VisionBoardScreen = () => {
   }
 
   useEffect(() => {
-    const prompt = `A full body shot of a man who is wearing the style of ${
-      selectedOptions.materialDesires.style[getRandomInt()]
-    }, who has achieved their purpose of ${
-      selectedOptions.purpose
-    } and lives the lifestyle of ${
-      selectedOptions.lifestyle
-    }, standing in front of their dream home which is a ${
-      selectedOptions.materialDesires.home[getRandomInt()]
-    }, and their dream car(s) which is a ${
-      selectedOptions.materialDesires.ride.length > 1
-        ? selectedOptions.materialDesires.ride[getRandomInt()]
-        : selectedOptions.materialDesires.ride[0]
-    }`;
+    if (selectedOptions.userPhotosDownloadURIs.length > 0) {
+      const prompt = `${
+        selectedOptions.userPhotosDownloadURIs[0]
+      } A full body shot of this person in 5 years, facing the camera and is wearing the style of ${
+        selectedOptions.materialDesires.style[getRandomInt()]
+      }, who has achieved their purpose of ${
+        selectedOptions.purpose
+      } and lives the lifestyle of ${
+        selectedOptions.lifestyle
+      }, standing in front of their dream home which is a ${
+        selectedOptions.materialDesires.home[getRandomInt()]
+      }, and their dream car(s) which is a ${
+        selectedOptions.materialDesires.ride.length > 1
+          ? selectedOptions.materialDesires.ride[getRandomInt()]
+          : selectedOptions.materialDesires.ride[0]
+      }, Realistic, Professional Photo`;
 
-    const generateImage = async () => {
-      if (selectedOptions.userPhotos.length > 0 && images.length < 2) {
-        try {
-          const creationResponse = await axios.post(
-            'https://api.mymidjourney.ai/api/v1/midjourney/imagine',
-            {
-              prompt: prompt,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${Config.MIDJOURNEY_API_TOKEN}`,
+      const generateImage = async () => {
+        if (selectedOptions.userPhotos.length > 0 && images.length < 2) {
+          try {
+            const creationResponse = await axios.post(
+              'https://api.mymidjourney.ai/api/v1/midjourney/imagine',
+              {
+                prompt: prompt,
               },
-            },
-          );
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${Config.MIDJOURNEY_API_TOKEN}`,
+                },
+              },
+            );
 
-          const messageId = creationResponse.data.messageId;
-          let imageResponse = await checkImageStatus(messageId);
+            const messageId = creationResponse.data.messageId;
+            let imageResponse = await checkImageStatus(messageId);
 
-          if (imageResponse.status === 'DONE') {
-            console.log('0', imageResponse.uri);
-            setImages((prev: any) => {
-              return [...prev, imageResponse.uri];
-            });
-          } else {
-            let intervalId = setInterval(async () => {
-              imageResponse = await checkImageStatus(messageId);
-              if (imageResponse.status === 'DONE') {
-                clearInterval(intervalId);
-                console.log('1', imageResponse.uri);
-                setImages((prev: any) => {
-                  return [...prev, imageResponse.uri];
-                });
-              }
-            }, 500);
+            if (imageResponse.status === 'DONE') {
+              console.log('0', imageResponse.uri);
+              setImages((prev: any) => {
+                return [...prev, imageResponse.uri];
+              });
+            } else {
+              let intervalId = setInterval(async () => {
+                imageResponse = await checkImageStatus(messageId);
+                if (imageResponse.status === 'DONE') {
+                  clearInterval(intervalId);
+                  console.log('1', imageResponse.uri);
+                  setImages((prev: any) => {
+                    return [...prev, imageResponse.uri];
+                  });
+                }
+              }, 500);
+            }
+          } catch (error) {
+            console.error('Error generating image:', error);
           }
-        } catch (error) {
-          console.error('Error generating image:', error);
         }
-      }
-    };
+      };
 
-    generateImage();
-    if (images.length < 2) {
       generateImage();
+      if (images.length < 2) {
+        generateImage();
+      }
     }
   }, [selectedOptions]);
 

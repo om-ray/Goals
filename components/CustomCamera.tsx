@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Svg, {Circle} from 'react-native-svg';
@@ -8,11 +7,13 @@ import {Context} from '../Context';
 import Styles from './Style/Styles';
 
 const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
-  const {selectedOptions, setSelectedOptions} = useContext(Context);
+  const {setSelectedOptions} = useContext(Context);
 
   const takePicture = async (camera: any) => {
     const options = {quality: 0.5, base64: true};
     const data = await camera.takePictureAsync(options);
+
+    navigation.navigate('ProfileCTAScreen');
 
     setSelectedOptions((prevState: any) => {
       return {...prevState, userPhotos: [data.uri]};
@@ -49,12 +50,6 @@ const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
       </View>
     );
   };
-
-  useEffect(() => {
-    if (selectedOptions.userPhotos.length > 0) {
-      navigation.navigate('ProfileCTAScreen');
-    }
-  }, [selectedOptions]);
 
   return (
     <View style={styles.container}>
