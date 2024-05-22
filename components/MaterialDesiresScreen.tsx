@@ -158,19 +158,19 @@ const MaterialDesiresScreen = ({
           misc: setDreamMisc,
         }[section];
 
-        const newItems = contextItems.filter((item: any) => {
-          if (
-            !customItemsList[section].includes(item) &&
-            !item.includes(item)
-          ) {
-            newCustomItems[section].push(item);
-            return true;
-          }
-          return item.includes(item);
-        });
+        // const newItems = contextItems.filter((item: any) => {
+        //   if (
+        //     !customItemsList[section].includes(item) &&
+        //     !item.includes(item)
+        //   ) {
+        //     newCustomItems[section].push(item);
+        //     return true;
+        //   }
+        //   return item.includes(item);
+        // });
 
         if (stateSetter) {
-          stateSetter([...contextItems, ...newItems]);
+          stateSetter([...contextItems]);
         }
       });
 

@@ -19,6 +19,8 @@ import NameScreen from './components/NameScreen.tsx';
 import ProfileCompleteScreen from './components/ProfileCompleteScreen.tsx';
 import VisionBoardScreen from './components/VisionBoardScreen.tsx';
 import storage from '@react-native-firebase/storage';
+import axios from 'axios';
+import Config from 'react-native-config';
 import {Context} from './Context.js';
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +30,9 @@ export const SELECTED_OPTIONS_KEY = 'SELECTED_OPTIONS';
 function App() {
   const [isReady, setIsReady] = useState(Platform.OS === 'web');
   const [initialState, setInitialState] = useState();
+  const [images, setImages] = useState<any>(() => null);
+  const [progress, setProgess] = useState(() => 0);
+  let generatingImage = false;
   const [selectedOptions, setSelectedOptions] = useState({
     purpose: '',
     lifestyle: '',
@@ -38,6 +43,12 @@ function App() {
     phoneNumber: '',
     name: '',
   });
+
+  function getRandomInt() {
+    let min = 0;
+    let max = 2;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
   const uploadImage = async (imageUri: string) => {
     if (!imageUri) {
@@ -100,6 +111,118 @@ function App() {
   }, [selectedOptions]);
 
   useEffect(() => {
+    if (selectedOptions.userPhotosDownloadURIs.length > 0) {
+      const prompt = `${
+        selectedOptions.userPhotosDownloadURIs[0]
+      } A full body shot of this person in 5 years, standing and facing the camera and is wearing the style of ${
+        selectedOptions.materialDesires.style[getRandomInt()]
+      }, who has achieved their purpose of ${
+        selectedOptions.purpose
+      } and lives the lifestyle of ${
+        selectedOptions.lifestyle
+      }, standing in front of their dream home which is a ${
+        selectedOptions.materialDesires.home[getRandomInt()]
+      }, and their dream car(s) which is a ${
+        selectedOptions.materialDesires.ride.length > 1
+          ? selectedOptions.materialDesires.ride[getRandomInt()]
+          : selectedOptions.materialDesires.ride[0]
+      }, --ar 1:1 --no frames, sitting, fat, ugly, short, black bars, background`;
+
+      console.log(prompt);
+
+      const generateImage = async function () {
+        if (
+          !generatingImage &&
+          selectedOptions.userPhotos.length > 0 &&
+          !images
+        ) {
+          generatingImage = true;
+          try {
+            const creationResponse = await axios.post(
+              'https://api.mymidjourney.ai/api/v1/midjourney/imagine',
+              {
+                prompt: prompt,
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${Config.MIDJOURNEY_API_TOKEN}`,
+                },
+              },
+            );
+
+            const messageId = creationResponse.data.messageId;
+            let imageResponse = await checkImageStatus(messageId);
+
+            if (imageResponse.status === 'DONE') {
+              if (!images) {
+                console.log('0', imageResponse.uri);
+                setImages(() => {
+                  return imageResponse.uri;
+                });
+                return;
+              }
+            } else {
+              if (!images) {
+                let intervalId = setInterval(async () => {
+                  imageResponse = await checkImageStatus(messageId);
+                  if (imageResponse.status === 'DONE') {
+                    clearInterval(intervalId);
+                    console.log('1', imageResponse.uri);
+                    setImages(() => {
+                      return imageResponse.uri;
+                    });
+                    return;
+                  }
+                }, 500);
+              }
+            }
+          } catch (error) {
+            console.error('Error generating image:', error);
+          }
+        }
+      };
+
+      if (
+        selectedOptions.userPhotosDownloadURIs.length > 0 &&
+        selectedOptions.materialDesires.style.length > 0 &&
+        selectedOptions.materialDesires.home.length > 0 &&
+        selectedOptions.materialDesires.ride.length > 0 &&
+        selectedOptions.purpose &&
+        selectedOptions.lifestyle &&
+        !generatingImage
+      ) {
+        generateImage();
+      }
+    }
+  }, [selectedOptions]);
+
+  const checkImageStatus = async (messageId: any) => {
+    const statusResponse = await axios.get(
+      `https://api.mymidjourney.ai/api/v1/midjourney/message/${messageId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${Config.MIDJOURNEY_API_TOKEN}`,
+        },
+      },
+    );
+    console.log(
+      'Image status:',
+      JSON.stringify(statusResponse.data.status),
+      '\n Image progress:',
+      JSON.stringify(statusResponse.data?.progress),
+    );
+    setProgess(prevState => {
+      return statusResponse.data.progress
+        ? statusResponse.data.progress < prevState
+          ? prevState
+          : statusResponse.data.progress
+        : prevState;
+    });
+    return statusResponse.data;
+  };
+
+  useEffect(() => {
     const restoreState = async () => {
       try {
         const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
@@ -129,6 +252,9 @@ function App() {
         value={{
           selectedOptions: selectedOptions,
           setSelectedOptions: setSelectedOptions,
+          images: images,
+          setImages: setImages,
+          progress: progress,
         }}>
         <Stack.Navigator initialRouteName="Splash">
           <Stack.Screen

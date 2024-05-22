@@ -5,6 +5,7 @@ import Svg, {Circle} from 'react-native-svg';
 import {NavigationProp} from '@react-navigation/native';
 import {Context} from '../Context';
 import Styles from './Style/Styles';
+import ImageResizer from 'react-native-image-resizer';
 
 const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {setSelectedOptions} = useContext(Context);
@@ -13,11 +14,31 @@ const CustomCamera = ({navigation}: {navigation: NavigationProp<any>}) => {
     const options = {quality: 0.5, base64: true};
     const data = await camera.takePictureAsync(options);
 
-    navigation.navigate('ProfileCTAScreen');
+    ImageResizer.createResizedImage(
+      data.uri,
+      700,
+      700,
+      'PNG',
+      100,
+      0,
+      undefined,
+      true,
+      {
+        onlyScaleDown: false,
+        mode: 'cover',
+      },
+    )
+      .then(response => {
+        navigation.navigate('ProfileCTAScreen');
+        console.log(response, JSON.stringify(response));
 
-    setSelectedOptions((prevState: any) => {
-      return {...prevState, userPhotos: [data.uri]};
-    });
+        setSelectedOptions((prevState: any) => {
+          return {...prevState, userPhotos: [response.uri]};
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   const renderCameraContent = (camera: any, status: string) => {
