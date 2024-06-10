@@ -21,6 +21,7 @@ import VisionBoardScreen from './components/VisionBoardScreen.tsx';
 import storage from '@react-native-firebase/storage';
 import axios from 'axios';
 import Config from 'react-native-config';
+import firestore from '@react-native-firebase/firestore';
 import {Context} from './Context.js';
 
 const Stack = createNativeStackNavigator();
@@ -111,6 +112,34 @@ function App() {
   }, [selectedOptions]);
 
   useEffect(() => {
+    const saveToFirestore = async () => {
+      if (
+        selectedOptions.purpose &&
+        selectedOptions.lifestyle &&
+        selectedOptions.materialDesires.home.length > 0 &&
+        selectedOptions.materialDesires.ride.length > 0 &&
+        selectedOptions.materialDesires.style.length > 0 &&
+        selectedOptions.userPhotos.length > 0 &&
+        selectedOptions.userPhotosDownloadURIs.length > 0 &&
+        selectedOptions.phoneNumber &&
+        selectedOptions.name
+      ) {
+        try {
+          await firestore()
+            .collection('user-profiles')
+            .doc(`${selectedOptions.name}-${selectedOptions.phoneNumber}`)
+            .set(selectedOptions);
+          console.log('Selected options saved to Firestore');
+        } catch (error) {
+          console.error('Error saving selected options to Firestore', error);
+        }
+      }
+    };
+
+    saveToFirestore();
+  }, [selectedOptions]);
+
+  useEffect(() => {
     if (selectedOptions.userPhotosDownloadURIs.length > 0) {
       const prompt = `${
         selectedOptions.userPhotosDownloadURIs[0]
@@ -126,7 +155,7 @@ function App() {
         selectedOptions.materialDesires.ride.length > 1
           ? selectedOptions.materialDesires.ride[getRandomInt()]
           : selectedOptions.materialDesires.ride[0]
-      }, --ar 1:1 --no frames, sitting, fat, ugly, short, black bars, background`;
+      }, --ar 1:1 --no frames, sitting, fat, ugly, short, black bars, background, double chin, bad hands, bad anatomy`;
 
       console.log(prompt);
 

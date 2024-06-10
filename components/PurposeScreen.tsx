@@ -10,6 +10,8 @@ import {
 import {Context} from '../Context';
 import Header from './Header';
 import Styles from './Style/Styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SELECTED_OPTIONS_KEY} from '../App';
 
 const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
   const {selectedOptions, setSelectedOptions} = useContext(Context);
@@ -59,7 +61,15 @@ const PurposeScreen = ({navigation}: {navigation: NavigationProp<any>}) => {
         renderItem={({item}) => renderItem(item)}
         keyExtractor={item => item}
       />
-      <TouchableOpacity style={Styles.moreOptionsButton}>
+      <TouchableOpacity
+        onPress={async () => {
+          try {
+            await AsyncStorage.removeItem(SELECTED_OPTIONS_KEY);
+          } finally {
+            console.log('storage cleared');
+          }
+        }}
+        style={Styles.moreOptionsButton}>
         <Image source={require('../assets/MaxiReset.png')} />
         <Text style={Styles.moreOptionsText}>More options</Text>
       </TouchableOpacity>

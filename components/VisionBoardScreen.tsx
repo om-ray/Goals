@@ -32,7 +32,7 @@ const VisionBoardScreen = () => {
             source={{uri: images}}
             style={styles.image}
             onLoad={() => {
-              setTimeout(() => setImagesLoaded(true), 2000);
+              setTimeout(() => setImagesLoaded(true), 4000);
             }}
           />
         </View>
@@ -42,7 +42,7 @@ const VisionBoardScreen = () => {
             size={200}
             color="#CC6F35"
             thickness={10}
-            fill="rgba(0, 0, 0, 0.2)"
+            indeterminate={progress > 0 ? false : true}
             progress={progress / 100}
           />
         ) : (
