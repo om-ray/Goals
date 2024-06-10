@@ -28,7 +28,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'Goals app' do
+target 'Goals-app' do
   use_expo_modules!
   use_modular_headers!
   post_integrate do |installer|
@@ -54,7 +54,7 @@ target 'Goals app' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'Goals appTests' do
+  target 'Goals-appTests' do
     inherit! :complete
     # Pods for testing
   end
