@@ -18,6 +18,7 @@
 		3F3AE2326CB74D5EB669F893 /* Bodoni-72-Medium-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 38EB5D97B7744BC9B3B76253 /* Bodoni-72-Medium-Italic.otf */; };
 		4418BD05B5C24B8C9FD8F613 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 270A46074A0C4849A1EC06AE /* Poppins-MediumItalic.ttf */; };
 		494A7557243E47EABA5983D2 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95C670D53BFA4CE4A406E5D4 /* Poppins-Black.ttf */; };
+		4A33014C2C173CCA0022A3F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A33014B2C173CCA0022A3F6 /* Assets.xcassets */; };
 		4AD2EE9B2BF397DD00F5C03E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4AD2EE9A2BF397DD00F5C03E /* GoogleService-Info.plist */; };
 		4AD2EE9C2BF397DD00F5C03E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4AD2EE9A2BF397DD00F5C03E /* GoogleService-Info.plist */; };
 		4F82950B43A34782A079C35D /* Bodoni-72-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 881C81A5133044078F30B1C8 /* Bodoni-72-Book.otf */; };
@@ -85,6 +86,7 @@
 		409A065D6A13427699ABF0A4 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		422DA0E5F91D4D6B8378F30C /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		463898D62C1F494DAEAC3A6D /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
+		4A33014B2C173CCA0022A3F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../App Icon Generator/Assets.xcassets"; sourceTree = "<group>"; };
 		4ABC7F8B2C0FEB7D00E9B0D9 /* MaxiRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MaxiRelease.entitlements; path = Maxi/MaxiRelease.entitlements; sourceTree = "<group>"; };
 		4AD2EE9A2BF397DD00F5C03E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5055EB387E99A269E63199E2 /* Pods-Goals-app-Goals-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Goals-app-Goals-appTests.release.xcconfig"; path = "Target Support Files/Pods-Goals-app-Goals-appTests/Pods-Goals-app-Goals-appTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				4A33014B2C173CCA0022A3F6 /* Assets.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -384,6 +387,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				39D70E55A3B243F68DB5058D /* Bodoni-72-Bold-Italic.otf in Resources */,
 				80FCEF60815F4E899D61C885 /* Bodoni-72-Bold.otf in Resources */,
+				4A33014C2C173CCA0022A3F6 /* Assets.xcassets in Resources */,
 				4AD2EE9B2BF397DD00F5C03E /* GoogleService-Info.plist in Resources */,
 				7C276267B2A34ECC889150CD /* Bodoni-72-Book-Italic.otf in Resources */,
 				4F82950B43A34782A079C35D /* Bodoni-72-Book.otf in Resources */,
@@ -688,7 +692,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6A02936586B5D54B0ED6400E /* Pods-Goals-app.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
